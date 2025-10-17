@@ -2,6 +2,9 @@
 ## Overview
 This project provisions a multi-VM Active Directory lab environment in Microsoft Azure using Terraform for infrastructure as code (IaC) and Ansible for post-deployment configuration. The lab simulates a real-world enterprise AD setup with multiple domain controllers, member servers, and clients, enabling scenarios such as domain joins, DNS configuration, and optional trusts between forests.
 
+## Active Directory Lab Deployment Architecture
+![Active Directory Lab Deployment](Designer.png)
+
 ## What We Have Done
 ### 1. Infrastructure Provisioning with Terraform
 
