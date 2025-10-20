@@ -1,46 +1,23 @@
 ---
-# Ensure AD DS binaries exist
-- name: Install AD Domain Services
+# Promote current host to an additional DC in an existing domain
+- name: Ensure AD DS binaries are present
   ansible.windows.win_feature:
     name:
       - AD-Domain-Services
     include_management_tools: yes
     state: present
 
-# Decide which domain to join/promote into
-- name: Determine target domain FQDN
-  ansible.builtin.set_fact:
-    target_domain: >-
-      {{ target_domain_fqdn | default(contoso_fqdn) }}
-
-# If this is a brand new separate forest (e.g., FabrikamDC1) create forest:
-- name: Create new forest (for separate forest scenarios)
-  ansible.windows.win_domain:
-    dns_domain_name: "{{ target_domain }}"
-    safe_mode_password: "{{ dsrm_password }}"
-    install_dns: yes
-  register: new_forest
-  when: target_is_new_forest | default(false)
-
-- name: Reboot after forest creation
-  ansible.windows.win_reboot:
-    msg: "Rebooting after new forest creation"
-  when:
-    - target_is_new_forest | default(false)
-    - new_forest.reboot_required | default(false)
-
-# Otherwise, promote as an additional DC in an existing domain:
-- name: Promote as additional DC
-  ansible.windows.win_domain_controller:
-    dns_domain_name: "{{ target_domain }}"
+- name: Promote to additional DC in {{ contoso_fqdn }} (microsoft.ad.domain_controller)
+  microsoft.ad.domain_controller:
+    domain_name: "{{ contoso_fqdn }}"
     domain_admin_user: "{{ domain_admin_user }}"
     domain_admin_password: "{{ domain_admin_password }}"
     safe_mode_password: "{{ dsrm_password }}"
     state: domain_controller
   register: add_dc
-  when: not (target_is_new_forest | default(false))
 
-- name: Reboot after DC promotion
+- name: Reboot after DC promotion if required
   ansible.windows.win_reboot:
     msg: "Rebooting after DC promotion"
+    reboot_timeout: 1800
   when: add_dc.reboot_required | default(false)
