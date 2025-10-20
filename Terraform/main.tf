@@ -161,6 +161,7 @@ resource "azurerm_windows_virtual_machine" "vm" {
   }
 }
 
-output "vm_private_ips" {
-  value = { for k, v in azurerm_network_interface.nic : k => v.ip_configuration[0].private_ip_address }
+output "vm_private_ips_map" {
+  description = "Private IPs for lab VMs (map)"
+  value       = { for k, v in azurerm_network_interface.nic : k => v.ip_configuration[0].private_ip_address }
 }

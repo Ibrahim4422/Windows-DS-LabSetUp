@@ -1,0 +1,5 @@
+---
+- name: Manage GPOs
+  hosts: "{{ forest_root_dc }}"
+  gather_facts: no
+  roles: [gpos]

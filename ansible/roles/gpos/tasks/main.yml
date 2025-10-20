@@ -1,0 +1,11 @@
+---
+- name: Ensure GPOs present (TODO fill from guide)
+  community.windows.win_gpo:
+    name: "<GPO_NAME>"
+    state: present
+
+- name: Link GPO to OU (TODO fill from guide)
+  community.windows.win_gpo_link:
+    name: "<GPO_NAME>"
+    ou: "<OU_DN>"
+    state: present

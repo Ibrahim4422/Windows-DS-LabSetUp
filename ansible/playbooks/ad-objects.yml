@@ -1,0 +1,5 @@
+---
+- name: Create OUs / Users / Groups
+  hosts: "{{ forest_root_dc }}"
+  gather_facts: no
+  roles: [ad-objects]

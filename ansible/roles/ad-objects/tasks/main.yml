@@ -1,0 +1,30 @@
+---
+# OUs
+- name: Ensure OU structure
+  community.windows.win_ou:
+    name: "{{ item.name }}"
+    path: "{{ item.path }}"
+    state: present
+  loop: "{{ ou_structure | default([]) }}"
+  vars:
+    ansible_become: false
+
+# Groups
+- name: Ensure AD groups
+  community.windows.win_domain_group:
+    name: "{{ item.name }}"
+    scope: "{{ item.scope | default('global') }}"
+    path: "{{ item.path }}"
+    state: present
+  loop: "{{ ad_groups | default([]) }}"
+
+# Users
+- name: Ensure AD users
+  community.windows.win_domain_user:
+    name: "{{ item.name }}"
+    upn: "{{ item.upn }}"
+    password: "{{ item.password }}"
+    password_never_expires: true
+    path: "{{ item.path }}"
+    state: present
+  loop: "{{ ad_users | default([]) }}"

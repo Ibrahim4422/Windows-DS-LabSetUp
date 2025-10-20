@@ -1,0 +1,93 @@
+# ---------- Domain topology (EDIT THESE) ----------
+contoso_fqdn: "<CONTOSO_FQDN>"         # e.g., contoso.com
+contoso_netbios: "<CONTOSO_NETBIOS>"   # e.g., CONTOSO
+
+# Optional child domains for Contoso:
+child_fqdns:                           # e.g., ["child.contoso.com"]
+  - "<CHILD1_FQDN>"
+# Add more if needed
+
+# Optional separate forest for Fabrikam:
+fabrikam_fqdn: "<FABRIKAM_FQDN>"       # e.g., fabrikam.com
+fabrikam_netbios: "<FABRIKAM_NETBIOS>" # e.g., FABRIKAM
+
+# ---------- Sites & Services (TODO from lab guide) ----------
+ad_sites:
+  - name: "<SITE_1>"
+  - name: "<SITE_2>"
+
+# ---------- DNS config ----------
+# Primary DC IPs per domain for client resolver settings
+contoso_dns_servers:
+  - "<IP_ContosoDC1>"
+  - "<IP_ContosoDC2>"
+
+# If child domain runs its own DNS, add or override in host/group vars as needed
+child_dns_servers:
+  - "<IP_ChildDC1>"
+
+fabrikam_dns_servers:
+  - "<IP_FabrikamDC1>"
+
+# DNS forwarders (Azure DNS is common in Azure VMs)
+dns_forwarders:
+  - "168.63.129.16"   # Azure-provided DNS
+  # - "<ADDITIONAL_FORWARDER>"
+
+# ---------- Credentials (from Vault; do not commit plaintext) ----------
+# Local admin for bootstrap/pre-join access:
+local_admin_user: "{{ vault_local_admin_user }}"
+local_admin_password: "{{ vault_local_admin_password }}"
+
+# Domain-admin credentials and DSRM:
+domain_admin_user: "{{ vault_domain_admin_user }}"
+domain_admin_password: "{{ vault_domain_admin_password }}"
+dsrm_password: "{{ vault_dsrm_password }}"
+
+# ---------- Role mappings (explicit hosts for roles if needed) ----------
+forest_root_dc: "ContosoDC1"         # The first DC promoting the forest
+additional_contoso_dcs:
+  - "ContosoDC2"
+
+child_domain_dcs:
+  "<CHILD1_FQDN>":
+    - "ChildDC1"
+    - "ChildDC2"
+    # - "ChildDC3"
+
+fabrikam_forest_dcs:
+  - "FabrikamDC1"
+
+# Domain membership targets:
+contoso_members:
+  - "Client1"
+  - "Client2"
+  - "Server1"
+
+# ---------- GPO/OU/Objects (TODO from guide) ----------
+# Provide real values or leave for later
+ou_structure:
+  - name: "Corp"
+    path: "DC={{ contoso_fqdn.split('.')[0] | upper }},DC={{ contoso_fqdn.split('.')[1] }}"
+  - name: "Servers"
+    path: "OU=Corp,DC={{ contoso_fqdn.split('.')[0] | upper }},DC={{ contoso_fqdn.split('.')[1] }}"
+
+ad_users:
+  - name: "<UPN or sAMAccountName>"
+    upn: "<user@{{ contoso_fqdn }}>"
+    password: "<PLACEHOLDER_OR_VAULT_VAR>"
+    path: "OU=Corp,DC={{ contoso_fqdn.split('.')[0] | upper }},DC={{ contoso_fqdn.split('.')[1] }}"
+    groups: ["<GROUP_1>"]
+
+ad_groups:
+  - name: "<GROUP_1>"
+    scope: "global"
+    path: "OU=Corp,DC={{ contoso_fqdn.split('.')[0] | upper }},DC={{ contoso_fqdn.split('.')[1] }}"
+
+# Trusts (TODOs)
+trusts:
+  - source_forest: "{{ contoso_fqdn }}"
+    target_forest: "{{ fabrikam_fqdn }}"
+    direction: "two-way"     # or one-way-outbound/inbound
+    selective_auth: false
+    transitive: true

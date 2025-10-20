@@ -1,0 +1,30 @@
+{
+  "vm_private_ips": {
+    "sensitive": false,
+    "type": [
+      "object",
+      {
+        "ChildDC1": "string",
+        "ChildDC2": "string",
+        "ChildDC3": "string",
+        "Client1": "string",
+        "Client2": "string",
+        "ContosoDC1": "string",
+        "ContosoDC2": "string",
+        "FabrikamDC1": "string",
+        "Server1": "string"
+      }
+    ],
+    "value": {
+      "ChildDC1": "192.168.2.53",
+      "ChildDC2": "192.168.2.55",
+      "ChildDC3": "192.168.2.56",
+      "Client1": "192.168.2.65",
+      "Client2": "192.168.2.66",
+      "ContosoDC1": "192.168.2.51",
+      "ContosoDC2": "192.168.2.52",
+      "FabrikamDC1": "192.168.2.54",
+      "Server1": "192.168.2.67"
+    }
+  }
+}

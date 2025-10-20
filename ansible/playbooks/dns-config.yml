@@ -1,0 +1,6 @@
+---
+- name: Configure DNS on all DCs
+  hosts: all_dcs
+  gather_facts: no
+  roles:
+    - dns-config 

@@ -1,0 +1,10 @@
+---
+# NOTE: Ansible may not have a one-liner module for trust creation.
+# Use PowerShell AD cmdlets (idempotent checks) as needed.
+- name: Ensure trusts
+  ansible.windows.win_shell: |
+    $existing = (Get-ADTrust -Filter {Target -eq "{{ item.target_forest }}"} -ErrorAction SilentlyContinue)
+    if (-not $existing) {
+      New-ADTrust -Name "{{ item.target_forest }}" -SourceForest "{{ item.source_forest }}" -TargetForest "{{ item.target_forest }}" -Direction {{ item.direction }} -Forest -Confirm:$false {{ '-SelectiveAuthentication $true' if item.selective_auth else '' }}
+    }
+  loop: "{{ trusts | default([]) }}"

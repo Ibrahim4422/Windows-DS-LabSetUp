@@ -1,0 +1,6 @@
+---
+- name: Bootstrap WinRM over HTTPS (use only if WinRM is reachable)
+  hosts: all
+  gather_facts: no
+  roles:
+    - role: bootstrap-winrm

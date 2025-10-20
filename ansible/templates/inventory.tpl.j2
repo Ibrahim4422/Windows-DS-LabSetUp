@@ -1,0 +1,47 @@
+all:
+  vars:
+    ansible_connection: winrm
+    ansible_port: 5986
+    ansible_winrm_scheme: https
+    ansible_winrm_transport: basic
+    ansible_winrm_server_cert_validation: ignore
+
+    ansible_user: "{{ local_admin_user }}"
+    ansible_password: "{{ local_admin_password }}"
+
+    domain_admin_user: "{{ vault_domain_admin_user }}"
+    domain_admin_password: "{{ vault_domain_admin_password }}"
+    dsrm_password: "{{ vault_dsrm_password }}"
+
+  children:
+    contoso_dcs:
+      hosts:
+        ContosoDC1:
+          ansible_host: "{{ vm_ips.get('ContosoDC1','<IP_ContosoDC1>') }}"
+        ContosoDC2:
+          ansible_host: "{{ vm_ips.get('ContosoDC2','<IP_ContosoDC2>') }}"
+    child_dcs:
+      hosts:
+        ChildDC1:
+          ansible_host: "{{ vm_ips.get('ChildDC1','<IP_ChildDC1>') }}"
+        ChildDC2:
+          ansible_host: "{{ vm_ips.get('ChildDC2','<IP_ChildDC2>') }}"
+        ChildDC3:
+          ansible_host: "{{ vm_ips.get('ChildDC3','<IP_ChildDC3>') }}"
+    fabrikam_dcs:
+      hosts:
+        FabrikamDC1:
+          ansible_host: "{{ vm_ips.get('FabrikamDC1','<IP_FabrikamDC1>') }}"
+    members:
+      hosts:
+        Client1:
+          ansible_host: "{{ vm_ips.get('Client1','<IP_Client1>') }}"
+        Client2:
+          ansible_host: "{{ vm_ips.get('Client2','<IP_Client2>') }}"
+        Server1:
+          ansible_host: "{{ vm_ips.get('Server1','<IP_Server1>') }}"
+    all_dcs:
+      children:
+        contoso_dcs
+        child_dcs
+        fabrikam_dcs

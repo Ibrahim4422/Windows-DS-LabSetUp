@@ -1,0 +1,6 @@
+---
+- name: Set DNS client and domain-join Contoso members
+  hosts: "{{ contoso_members | default([]) }}"
+  gather_facts: no
+  roles:
+    - domain-join

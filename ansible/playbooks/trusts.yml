@@ -1,0 +1,5 @@
+---
+- name: Configure inter-forest/domain trusts (if required)
+  hosts: "{{ forest_root_dc }}"
+  gather_facts: no
+  roles: [trusts]
