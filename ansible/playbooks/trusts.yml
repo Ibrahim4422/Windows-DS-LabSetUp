@@ -3,5 +3,6 @@
   hosts: "{{ forest_root_dc }}"
   gather_facts: no
   vars_files:
+    - ../group_vars/all.yml
     - ../group_vars/vault.yml
   roles: [trusts]

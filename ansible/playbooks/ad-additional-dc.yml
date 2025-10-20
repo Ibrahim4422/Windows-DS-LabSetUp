@@ -3,6 +3,7 @@
   hosts: "{{ additional_contoso_dcs | default([]) }}"
   gather_facts: no
   vars_files:
+    - ../group_vars/all.yml
     - ../group_vars/vault.yml
   roles:
     - ad-additional-dc
@@ -11,6 +12,7 @@
   hosts: "{{ child_domain_dcs.values() | flatten | default([]) }}"
   gather_facts: no
   vars_files:
+    - ../group_vars/all.yml
     - ../group_vars/vault.yml
   roles:
     - ad-additional-dc
@@ -21,6 +23,7 @@
   hosts: "{{ fabrikam_forest_dcs | default([]) }}"
   gather_facts: no
   vars_files:
+    - ../group_vars/all.yml
     - ../group_vars/vault.yml
   roles:
     - ad-additional-dc

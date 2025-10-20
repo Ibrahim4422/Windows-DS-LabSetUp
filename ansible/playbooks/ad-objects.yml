@@ -2,6 +2,7 @@
 - name: Create OUs / Users / Groups
   hosts: "{{ forest_root_dc }}"
   gather_facts: no
-  roles: [ad-objects]
   vars_files:
+    - ../group_vars/all.yml
     - ../group_vars/vault.yml
+  roles: [ad-objects]

@@ -3,6 +3,7 @@
   hosts: "{{ contoso_members | default([]) }}"
   gather_facts: no
   vars_files:
+    - ../group_vars/all.yml
     - ../group_vars/vault.yml
   roles:
     - domain-join
