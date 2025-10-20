@@ -1,9 +1,9 @@
 ---
 - name: Configure DNS on all DCs
-  hosts: all_dcs
+  hosts: ContosoDC1,ContosoDC2,ChildDC1,ChildDC2,ChildDC3,FabrikamDC1
   gather_facts: no
   vars_files:
     - ../group_vars/all.yml
     - ../group_vars/vault.yml
   roles:
-    - dns-config 
+    - dns-config

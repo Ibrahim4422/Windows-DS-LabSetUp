@@ -1,6 +1,6 @@
 ---
-- name: Set DNS client and domain-join Contoso members
-  hosts: "{{ contoso_members | default([]) }}"
+- name: Set DNS and domain-join members to contoso.com
+  hosts: Client1,Client2,Server1
   gather_facts: no
   vars_files:
     - ../group_vars/all.yml

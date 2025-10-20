@@ -1,5 +1,4 @@
 ---
-# Promote current host to an additional DC in an existing domain
 - name: Ensure AD DS binaries are present
   ansible.windows.win_feature:
     name:
@@ -9,10 +8,11 @@
 
 - name: Promote to additional DC in {{ contoso_fqdn }} (microsoft.ad.domain_controller)
   microsoft.ad.domain_controller:
-    domain_name: "{{ contoso_fqdn }}"
+    dns_domain_name: "{{ contoso_fqdn }}"
     domain_admin_user: "{{ domain_admin_user }}"
     domain_admin_password: "{{ domain_admin_password }}"
     safe_mode_password: "{{ dsrm_password }}"
+    install_dns: true
     state: domain_controller
   register: add_dc
 

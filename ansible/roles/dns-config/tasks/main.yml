@@ -1,18 +1,23 @@
 ---
-# Forwarders are idempotent via community.windows.win_dns_server_forwarder
-- name: Ensure DNS forwarders are configured
+- name: Ensure DNS Server role is present (if not already via AD DS)
+  ansible.windows.win_feature:
+    name: DNS
+    include_management_tools: yes
+    state: present
+
+- name: Configure DNS forwarders (idempotent)
   community.windows.win_dns_server_forwarder:
     forwarders: "{{ dns_forwarders }}"
     clear_existing: false
     state: present
 
-# Example: conditional forwarder between forests (Contoso <-> Fabrikam) if required
-- name: Conditional forwarder to Fabrikam (if trust planned)
-  community.windows.win_dns_server_setting:
-    zone_type: "ConditionalForwarder"
+# Optional: conditional forwarder to Fabrikam (if you plan trusts)
+- name: Conditional forwarder to Fabrikam (optional)
+  community.windows.win_dns_server_zone:
     name: "{{ fabrikam_fqdn }}"
+    type: ConditionalForwarder
+    replication_scope: Forest
     master_servers: "{{ fabrikam_dns_servers | default([]) }}"
-    replication_scope: "Forest"
   when:
     - fabrikam_fqdn is defined
     - fabrikam_dns_servers | length > 0

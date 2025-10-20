@@ -1,5 +1,5 @@
 ---
-- name: Point DNS to Contoso DCs
+- name: Set DNS client servers to Contoso DCs
   ansible.windows.win_dns_client:
     adapter_names: '*'
     ipv4_addresses: "{{ contoso_dns_servers }}"
@@ -15,5 +15,5 @@
 
 - name: Reboot after domain join if required
   ansible.windows.win_reboot:
-    msg: "Rebooting after domain join"
+    reboot_timeout: 1800
   when: domain_join.reboot_required | default(false)
