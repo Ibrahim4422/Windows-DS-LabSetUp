@@ -1,32 +1,9 @@
 ---
-- name: Promote additional Contoso DCs
-  hosts: "{{ additional_contoso_dcs | default([]) }}"
+- name: Promote ContosoDC2 as additional DC in contoso.com
+  hosts: ContosoDC2
   gather_facts: no
   vars_files:
     - ../group_vars/all.yml
     - ../group_vars/vault.yml
   roles:
     - ad-additional-dc
-
-- name: Promote Child Domain DCs (if any)
-  hosts: "{{ child_domain_dcs.values() | flatten | default([]) }}"
-  gather_facts: no
-  vars_files:
-    - ../group_vars/all.yml
-    - ../group_vars/vault.yml
-  roles:
-    - ad-additional-dc
-  vars:
-    target_domain_fqdn: "{{ (child_domain_dcs | dict2items | selectattr('value','contains', inventory_hostname) | map(attribute='key') | list | first) | default(contoso_fqdn) }}"
-
-- name: Promote Fabrikam Forest DC(s) (if Fabrikam is separate forest)
-  hosts: "{{ fabrikam_forest_dcs | default([]) }}"
-  gather_facts: no
-  vars_files:
-    - ../group_vars/all.yml
-    - ../group_vars/vault.yml
-  roles:
-    - ad-additional-dc
-  vars:
-    target_domain_fqdn: "{{ fabrikam_fqdn }}"
-    target_is_new_forest: true
