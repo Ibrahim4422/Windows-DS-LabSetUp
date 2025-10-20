@@ -6,9 +6,8 @@
     state: present
 
 - name: Configure DNS forwarders (idempotent)
-  community.windows.win_dns_server_forwarder:
+  ansible.windows.win_dns_server_forwarder:
     forwarders: "{{ dns_forwarders }}"
-    clear_existing: false
     state: present
 
 # Optional: conditional forwarder to Fabrikam (if you plan trusts)
