@@ -1,9 +1,9 @@
-# playbooks/ad-forest.yml
 ---
 - name: Create Contoso forest on ContosoDC1
   hosts: ContosoDC1
   gather_facts: no
   vars_files:
+    - ../group_vars/all.yml
     - ../group_vars/vault.yml
   roles:
     - ad-forest
