@@ -2,5 +2,7 @@
 - name: Create Contoso forest on {{ forest_root_dc }}
   hosts: "{{ forest_root_dc }}"
   gather_facts: no
+  vars_files:
+    - ../group_vars/vault.yml
   roles:
     - ad-forest

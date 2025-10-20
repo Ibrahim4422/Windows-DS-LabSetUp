@@ -2,12 +2,16 @@
 - name: Promote additional Contoso DCs
   hosts: "{{ additional_contoso_dcs | default([]) }}"
   gather_facts: no
+  vars_files:
+    - ../group_vars/vault.yml
   roles:
     - ad-additional-dc
 
 - name: Promote Child Domain DCs (if any)
   hosts: "{{ child_domain_dcs.values() | flatten | default([]) }}"
   gather_facts: no
+  vars_files:
+    - ../group_vars/vault.yml
   roles:
     - ad-additional-dc
   vars:
@@ -16,6 +20,8 @@
 - name: Promote Fabrikam Forest DC(s) (if Fabrikam is separate forest)
   hosts: "{{ fabrikam_forest_dcs | default([]) }}"
   gather_facts: no
+  vars_files:
+    - ../group_vars/vault.yml
   roles:
     - ad-additional-dc
   vars:

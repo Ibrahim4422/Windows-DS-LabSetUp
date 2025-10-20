@@ -3,3 +3,5 @@
   hosts: "{{ forest_root_dc }}"
   gather_facts: no
   roles: [ad-objects]
+  vars_files:
+    - ../group_vars/vault.yml

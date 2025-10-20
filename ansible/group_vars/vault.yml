@@ -1,0 +1,7 @@
+vault_local_admin_user: "azureadmin"
+vault_local_admin_password: "Password1234"
+
+vault_domain_admin_user: "azureadmin"
+vault_domain_admin_password: "Password1234"
+
+vault_dsrm_password: "Password1234"
